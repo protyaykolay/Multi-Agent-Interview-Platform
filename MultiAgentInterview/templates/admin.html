@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Admin</title>
+
+</head>
+
+<body>
+
+<h1>
+
+Interview Results
+
+</h1>
+
+<table border="1">
+
+<tr>
+
+<th>Name</th>
+
+<th>Email</th>
+
+<th>Student ID</th>
+
+<th>Score</th>
+
+</tr>
+
+{% for row in results %}
+
+<tr>
+
+<td>{{row[1]}}</td>
+
+<td>{{row[2]}}</td>
+
+<td>{{row[3]}}</td>
+
+<td>{{row[4]}}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</body>
+
+</html>

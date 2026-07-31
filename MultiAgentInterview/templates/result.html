@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Interview Result</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static',filename='style.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+</head>
+
+<body>
+
+<div class="result-card" id="resultPage">
+
+<h1>🎉 Interview Completed</h1>
+
+<div class="summary">
+
+    <div class="box">
+        <h3>Candidate</h3>
+        <p>{{ name }}</p>
+    </div>
+
+    <div class="box">
+        <h3>Quiz Score</h3>
+        <p>{{ score }}/4</p>
+    </div>
+
+    <div class="box">
+        <h3>Technical</h3>
+        <p style="color:#2563eb;font-size:24px;font-weight:bold;">
+            {{ tech }}/10
+        </p>
+    </div>
+
+    <div class="box">
+        <h3>Communication</h3>
+        <p style="color:#16a34a;font-size:24px;font-weight:bold;">
+            {{ communication }}/10
+        </p>
+    </div>
+
+</div>
+
+<hr>
+
+<h2>🤖 AI Evaluation Report</h2>
+
+<p><b>Technical Accuracy:</b> {{ tech }}/10</p>
+
+<p><b>Communication:</b> {{ communication }}/10</p>
+
+<hr>
+
+<h2>📝 Question-wise Feedback</h2>
+
+{% for report in reports %}
+
+<div class="feedback-card">
+
+    <h3>{{ report.question }}</h3>
+
+    <p><b>Technical:</b> {{ report.technical }}/10</p>
+
+    <p><b>Communication:</b> {{ report.communication }}/10</p>
+
+    <p><b>Feedback:</b> {{ report.overall }}</p>
+
+</div>
+
+{% endfor %}
+
+<hr>
+
+<h2>📊 Performance Analytics</h2>
+
+<canvas id="scoreChart" width="600" height="250"></canvas>
+
+<br><br>
+
+<canvas id="questionChart" width="600" height="250"></canvas>
+
+<br><br>
+
+<button onclick="printReport()">
+📄 Download Report
+</button>
+
+&nbsp;&nbsp;
+
+<a href="/logout">
+    <button class="finish-btn">
+        🏠 Finish Interview
+    </button>
+</a>
+
+</div>
+
+<script>
+
+const tech={{ tech }};
+const comm={{ communication }};
+
+const techScores={{ technical_scores|tojson }};
+const commScores={{ communication_scores|tojson }};
+const questions={{ question_names|tojson }};
+
+// Overall Chart
+
+new Chart(document.getElementById("scoreChart"),{
+
+type:"bar",
+
+data:{
+
+labels:["Technical","Communication"],
+
+datasets:[{
+
+label:"Average Score",
+
+data:[tech,comm],
+
+backgroundColor:[
+"#3b82f6",
+"#22c55e"
+]
+
+}]
+
+},
+
+options:{
+responsive:true,
+scales:{
+y:{
+beginAtZero:true,
+max:10
+}
+}
+}
+
+});
+
+// Question Chart
+
+new Chart(document.getElementById("questionChart"),{
+
+type:"line",
+
+data:{
+
+labels:questions,
+
+datasets:[
+
+{
+
+label:"Technical",
+
+data:techScores,
+
+borderColor:"#2563eb",
+
+fill:false
+
+},
+
+{
+
+label:"Communication",
+
+data:commScores,
+
+borderColor:"#16a34a",
+
+fill:false
+
+}
+
+]
+
+},
+
+options:{
+responsive:true,
+scales:{
+y:{
+beginAtZero:true,
+max:10
+}
+}
+}
+
+});
+
+function printReport() {
+    window.print();
+}
+
+</script>
+
+</body>
+
+</html>
